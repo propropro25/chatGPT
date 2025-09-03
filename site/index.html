@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>ChatGPT Questions Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header>
+    <h1>ChatGPT – Questions Only</h1>
+    <div class="modes">
+      <button id="mode-cloud" class="active">Cloud data</button>
+      <button id="mode-local">Local (drop JSON)</button>
+      <input type="file" id="file" accept=".json" hidden/>
+    </div>
+  </header>
+
+  <main>
+    <aside id="sidebar">
+      <div class="search">
+        <input id="q" placeholder="Search text…"/>
+      </div>
+      <div id="days"></div>
+    </aside>
+
+    <section id="content">
+      <div id="intro">
+        <p>Select a day to see your questions. Use **Cloud data** after you publish a Release with <code>conversations.json</code>, or switch to <b>Local</b> and drop the file here.</p>
+      </div>
+
+      <div id="toolbar" class="hidden">
+        <button id="export-md">Export Markdown</button>
+        <button id="print">Print / Save PDF</button>
+        <span id="meta"></span>
+      </div>
+
+      <ol id="list"></ol>
+
+      <div id="drop" class="hidden">
+        <p>Drop <code>conversations.json</code> here to view locally.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="./viewer.js"></script>
+</body>
+</html>
