@@ -1,0 +1,53 @@
+name: Build & Deploy Questions Viewer
+
+on:
+  release:
+    types: [published]   # runs when you publish a release (with the JSON attached)
+  workflow_dispatch:     # lets you run it manually from the Actions tab
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Download conversations.json from the latest published release
+      - name: Download latest release asset
+        uses: robinraju/release-downloader@v1.10
+        with:
+          latest: true
+          fileName: "conversations.json"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps (none required, but keeps step explicit)
+        run: npm ci || true
+
+      - name: Process conversations.json -> site/data
+        run: node scripts/process.js conversations.json
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
